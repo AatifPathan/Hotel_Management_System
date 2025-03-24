@@ -21,7 +21,7 @@ class HotelManagementSystem:
         # Create Main Buttons
         self.create_main_buttons()
         # At the end of your __init__ method, add the following code
-        self.initials_label = tk.Label(self.root, text="@ap", font=("Arial", 10, "italic"))
+        self.initials_label = tk.Label(self.root, text="@aaa", font=("Arial", 10, "italic"))
         self.initials_label.pack(side="bottom", pady=10)
 
     def create_tables(self):
@@ -70,18 +70,18 @@ class HotelManagementSystem:
 
     def show_management(self):
         self.clear_frame()
-
         back_btn = ttk.Button(self.root, text="← Back", command=self.create_main_buttons)
         back_btn.pack(anchor='w', padx=10, pady=5)
-
         btn_frame = ttk.Frame(self.root)
         btn_frame.pack(pady=20)
-
         ttk.Button(btn_frame, text="Room Reservation", command=self.show_room_reservation).grid(row=0, column=0, padx=10, pady=5)
         ttk.Button(btn_frame, text="Manage Department", command=self.show_manage_department).grid(row=0, column=1, padx=10, pady=5)
         ttk.Button(btn_frame, text="Manage Staff", command=self.show_manage_staff).grid(row=1, column=0, padx=10, pady=5)
         ttk.Button(btn_frame, text="Guest Information", command=self.show_guest_information).grid(row=1, column=1, padx=10, pady=5)
+        ttk.Button(btn_frame, text="Close Reservation", command=self.show_close_reservation).grid(row=2, column=0, columnspan=2, pady=10)
 
+
+    
     def show_manage_staff(self):
         self.clear_frame()
 
@@ -282,6 +282,55 @@ class HotelManagementSystem:
         self.cursor.execute("SELECT * FROM Department")
         for row in self.cursor.fetchall():
             department_table.insert("", "end", values=row)
+    def show_close_reservation(self):
+        self.clear_frame()
+
+        back_btn = ttk.Button(self.root, text="← Back", command=self.show_management)
+        back_btn.pack(anchor='w', padx=10, pady=5)
+
+        table_frame = ttk.Frame(self.root)
+        table_frame.pack(pady=20, fill="both", expand=True)
+
+        columns = ("Guest ID", "Name", "Room No", "Check-out Date")
+
+        tree_scroll_x = ttk.Scrollbar(table_frame, orient="horizontal")
+        tree_scroll_y = ttk.Scrollbar(table_frame, orient="vertical")
+
+        self.reservation_table = ttk.Treeview(
+            table_frame, columns=columns, show="headings",
+            xscrollcommand=tree_scroll_x.set, yscrollcommand=tree_scroll_y.set
+            )
+
+        tree_scroll_x.config(command=self.reservation_table.xview)
+        tree_scroll_y.config(command=self.reservation_table.yview)
+
+        for col in columns:
+            self.reservation_table.heading(col, text=col)
+            self.reservation_table.column(col, width=100)
+        self.reservation_table.grid(row=0, column=0, sticky="nsew")
+        tree_scroll_x.grid(row=1, column=0, sticky="ew")
+        tree_scroll_y.grid(row=0, column=1, sticky="ns")
+        table_frame.columnconfigure(0, weight=1)
+        table_frame.rowconfigure(0, weight=1)
+        ttk.Button(self.root, text="Close Selected Reservation", command=self.close_selected_reservation).pack(pady=10)
+        self.cursor.execute("SELECT guest_id, name, room_no, check_out FROM Guest")
+        for row in self.cursor.fetchall():
+            self.reservation_table.insert("", "end", values=row) 
+    def close_selected_reservation(self):
+        selected_item = self.reservation_table.selection()
+        if not selected_item:
+            messagebox.showwarning("Warning", "Please select a reservation to close.")
+            return
+        guest_id = self.reservation_table.item(selected_item, "values")[0]
+
+    # Delete from database
+        self.cursor.execute("DELETE FROM Guest WHERE guest_id=?", (guest_id,))
+        self.conn.commit()
+
+    # Remove from table view
+        self.reservation_table.delete(selected_item)
+        messagebox.showinfo("Success", "Reservation closed successfully!")
+   
     def show_guest(self):
         self.clear_frame()
 
