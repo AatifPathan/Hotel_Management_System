@@ -6,10 +6,10 @@ The **Hotel Management System** is a software application designed to streamline
 ## Features
 - **Room Booking & Reservation**: Manage room availability and reservations efficiently.
 - **Customer Management**: Store and retrieve customer details.
-- **Billing & Payments**: Generate invoices and process payments.
+- **Booking Functionality**: Guest Booking with check in and check out features.
 - **Staff Management**: Assign roles and monitor staff activities.
-- **Reports & Analytics**: Generate reports on occupancy, revenue, and performance.
-- **User Authentication**: Secure login for different roles (Admin, Receptionist, etc.).
+- **Management Facilities**: Close a reservation,manage staff and many more.
+- **User Authentication**: Secure login for different roles.
 
 ## Technologies Used
 - **UI**: Python 
