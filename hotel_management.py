@@ -15,14 +15,14 @@ class HotelManagementSystem:
         self.create_tables()
 
         # Create Heading
-        self.heading = tk.Label(self.root, text="HOTEL MANAGEMENT SYSTEM", font=("Arial", 16, "bold"))
-        self.heading.pack(pady=10)
+        self.heading = tk.Label(self.root, text="WELCOME TO HOTEL MANAGEMENT", font=("Helvetica", 16, "bold"))
+        self.heading.pack(pady=15)
 
         # Create Main Buttons
         self.create_main_buttons()
         # At the end of your __init__ method, add the following code
-        self.initials_label = tk.Label(self.root, text="@aaa", font=("Arial", 10, "italic"))
-        self.initials_label.pack(side="bottom", pady=10)
+        self.initials_label = tk.Label(self.root, text="@hotel_mgmt", font=("Helvetica", 10, "italic"))
+        self.initials_label.pack(side="bottom", pady=5)
 
     def create_tables(self):
         # Creating the Guest table
@@ -64,9 +64,15 @@ class HotelManagementSystem:
 
         management_btn = ttk.Button(btn_frame, text="Management", command=self.show_management)
         management_btn.grid(row=0, column=0, padx=20, pady=10)
+        management_btn.configure(style="TButton")
 
         guest_btn = ttk.Button(btn_frame, text="Guest", command=self.show_guest)
         guest_btn.grid(row=0, column=1, padx=20, pady=10)
+        guest_btn.configure(style="TButton")
+        
+        # Add styles for buttons
+        style = ttk.Style()
+        style.configure("TButton", background="lightblue", foreground="black", font=("Arial", 12, "bold"))
 
     def show_management(self):
         self.clear_frame()
