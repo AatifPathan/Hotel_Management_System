@@ -8,12 +8,6 @@ class HotelManagementSystem:
         self.root = root
         self.root.title("Hotel Management System")
         self.root.geometry("850x500")
-
-        # Load the background image
-        self.bg_image = tk.PhotoImage(file="Building.png")
-        self.bg_label = tk.Label(self.root, image=self.bg_image)
-        self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-        
         # Initialize Database
         self.conn = sqlite3.connect("hotel_management.db")
         self.cursor = self.conn.cursor()
